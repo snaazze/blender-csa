@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's 3D Heart</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: black; }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.136.0/build/three.module.js';
+        import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.136.0/examples/jsm/controls/OrbitControls.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Heart shape
+        const heartShape = new THREE.Shape();
+        heartShape.moveTo(0, 0.3);
+        heartShape.bezierCurveTo(0.2, 0.6, 0.6, 0.6, 0.7, 0.3);
+        heartShape.bezierCurveTo(0.8, -0.1, 0.2, -0.6, 0, -0.3);
+        heartShape.bezierCurveTo(-0.2, -0.6, -0.8, -0.1, -0.7, 0.3);
+        heartShape.bezierCurveTo(-0.6, 0.6, -0.2, 0.6, 0, 0.3);
+
+        const extrudeSettings = { depth: 0.2, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 10 };
+        const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+        const material = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff0033, metalness: 0.5, roughness: 0.3 });
+        const heart = new THREE.Mesh(geometry, material);
+        heart.rotation.x = Math.PI;
+        scene.add(heart);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xff0000, 1, 10);
+        pointLight.position.set(1, 2, 3);
+        scene.add(pointLight);
+
+        // Camera positioning
+        camera.position.z = 2;
+        const controls = new OrbitControls(camera, renderer.domElement);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            heart.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive design
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
