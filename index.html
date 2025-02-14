@@ -30,20 +30,23 @@
 
         const extrudeSettings = { depth: 0.2, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 10 };
         const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
-        const material = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff0033, metalness: 0.5, roughness: 0.3 });
+        const material = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff0033, emissiveIntensity: 1, metalness: 0.7, roughness: 0.2 });
         const heart = new THREE.Mesh(geometry, material);
         heart.rotation.x = Math.PI;
+        heart.rotation.y = Math.PI / 4;
         scene.add(heart);
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1);
         scene.add(ambientLight);
-        const pointLight = new THREE.PointLight(0xff0000, 1, 10);
-        pointLight.position.set(1, 2, 3);
+        const pointLight = new THREE.PointLight(0xff0000, 2, 10);
+        pointLight.position.set(2, 3, 4);
         scene.add(pointLight);
 
         // Camera positioning
-        camera.position.z = 2;
+        camera.position.z = 3;
+        camera.position.y = 1;
+        camera.lookAt(heart.position);
         const controls = new OrbitControls(camera, renderer.domElement);
 
         // Animation loop
